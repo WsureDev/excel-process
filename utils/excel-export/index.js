@@ -1,33 +1,24 @@
 const index = require('excel-export');
-const fs = require('fs')
 exports.write = (excelObject) => {
+    //excel对象
     const excel = {};
-    excel.rows = excelObject.data;
-    const fileName = excelObject.fileName;  //只支持字母和数字命名
+    //excel列列表
     let cols = excelObject.column;
+    //生成excel列对象
     excel.cols = cols.map( c => {
-        return {caption:c, type:'string', width:(c+1)*30}
+        return {caption:c, type:'string', width:(c+1)*10} //列宽按字数*10
     });
 
-
-    // const array = [];
-    // for(let i = 1;i<data.length;i++){
-    //     let phone = data[i][phoneIndex];
-    //     if(phone){
-    //         let numbers = phone.toString().split(/\s+/);
-    //         data[i][phoneIndex] = numbers.filter( num => /^1\d{10}$/.test(num)).slice(0,2).join(' ');
-    //     }
-    //     array.push(data[i])
-    // }
-
-    const result = index.execute(excel);
-
-    const uploadDir = '../../uploads/excel/download/';
-    const filePath = uploadDir + fileName + ".xlsx";
-
-    fs.writeFile(filePath, result, 'binary',(err) => {
-        if(err){
-            console.log(err);
-        }
+    //excel内容 对象转二维数组
+    excel.rows = excelObject.data.map(row => {
+        let rowArr = [];
+        cols.forEach( c => {
+            //空的内容直接当成空白处理
+            rowArr.push(row[c] === undefined ? '' : row[c]);
+        })
+        return rowArr;
     });
+    //  返回excel对象
+    return index.execute(excel);
+
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body>
+<h1><%= title %></h1>
+<h2>powered by wsure</h2>
+<p>Welcome to <%= title %></p>
+
+<form method="post" enctype="multipart/form-data" action="/excel/download">
+    Excel：<input type="file" name="file"><br/>
+    Cols：<label>
+        <input type="text" name="cols" pattern="^[\d,]+$">
+    </label><br/>
+    Sheet：<label>
+        <input type="number" name="sheet" value="0"/>
+    </label><br/>
+    Strategy：<label>
+        <input type="text" name="strategy" hidden>
+    </label>
+
+    <input type="submit">
+</form>
+<footer> powered by wsure</footer>
+</body>
+</html>

@@ -1,30 +1,23 @@
 Arguments: 
-  /usr/local/Cellar/node/14.5.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add xksx
+  /usr/local/Cellar/node/14.2.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js install
 
 PATH: 
-  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/wsure/WebstormProjects/excel-process/node_modules/.bin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 
 Yarn version: 
   1.22.4
 
 Node version: 
-  14.5.0
+  14.2.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/xksx: Not found
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
-      at Request.emit (events.js:314:20)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141720:10)
-      at Request.emit (events.js:314:20)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141642:12)
-      at Object.onceWrapper (events.js:420:28)
-      at IncomingMessage.emit (events.js:326:22)
-      at endReadableNT (_stream_readable.js:1226:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  Error: https://registry.yarnpkg.com/cookie-parser/-/cookie-parser-1.4.5.tgz: ETIMEDOUT
+      at Timeout._onTimeout (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141408:19)
+      at listOnTimeout (internal/timers.js:549:17)
+      at processTimers (internal/timers.js:492:7)
 
 npm manifest: 
   {
@@ -46,8 +39,8 @@ npm manifest:
       "morgan": "~1.9.1",
       "multer": "^1.4.2",
       "mysql": "^2.18.1",
-      "node-xlrd": "^0.2.4",
-      "node-xlsx": "^0.15.0"
+      "node-xlsx": "^0.15.0",
+      "xlsx": "^0.16.3"
     },
     "devDependencies": {
       "excel-export": "^0.5.1"
@@ -265,7 +258,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
     integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
   
-  cfb@^1.1.2:
+  cfb@^1.1.2, cfb@^1.1.4:
     version "1.2.0"
     resolved "https://registry.yarnpkg.com/cfb/-/cfb-1.2.0.tgz#6a4d0872b525ed60349e1ef51fb4b0bf73eca9a8"
     integrity sha512-sXMvHsKCICVR3Naq+J556K+ExBo9n50iKl6LGarlnvuA2035uMlGA/qVrc0wQtow5P1vJEw9UyrKLCbtIKz+TQ==
@@ -708,11 +701,6 @@ Lockfile:
     dependencies:
       safer-buffer ">= 2.1.2 < 3"
   
-  iconv-lite@~0.2.11:
-    version "0.2.11"
-    resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.2.11.tgz#1ce60a3a57864a292d1321ff4609ca4bb965adc8"
-    integrity sha1-HOYKOleGSiktEyH/RgnKS7llrcg=
-  
   image-size@~0.5.0:
     version "0.5.5"
     resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
@@ -938,13 +926,6 @@ Lockfile:
     version "0.6.2"
     resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
     integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
-  
-  node-xlrd@^0.2.4:
-    version "0.2.4"
-    resolved "https://registry.yarnpkg.com/node-xlrd/-/node-xlrd-0.2.4.tgz#13477dcd5a4765432a4cf4a3f5eabd8d30004695"
-    integrity sha1-E0d9zVpHZUMqTPSj9eq9jTAARpU=
-    dependencies:
-      iconv-lite "~0.2.11"
   
   node-xlsx@^0.15.0:
     version "0.15.0"
@@ -1257,6 +1238,13 @@ Lockfile:
     dependencies:
       frac "~1.1.2"
   
+  ssf@~0.11.2:
+    version "0.11.2"
+    resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.11.2.tgz#0b99698b237548d088fc43cdf2b70c1a7512c06c"
+    integrity sha512-+idbmIXoYET47hH+d7dfm2epdOMUDjqcB4648sTZ+t2JwoyBFL/insLfB/racrDmsKB3diwsDA696pZMieAC5g==
+    dependencies:
+      frac "~1.1.2"
+  
   sshpk@^1.7.0:
     version "1.16.1"
     resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.16.1.tgz#fb661c0bef29b39db40769ee39fa70093d6f6877"
@@ -1400,6 +1388,16 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/weak-map/-/weak-map-1.0.5.tgz#79691584d98607f5070bd3b70a40e6bb22e401eb"
     integrity sha1-eWkVhNmGB/UHC9O3CkDmuyLkAes=
   
+  wmf@~1.0.1:
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/wmf/-/wmf-1.0.2.tgz#7d19d621071a08c2bdc6b7e688a9c435298cc2da"
+    integrity sha512-/p9K7bEh0Dj6WbXg4JG0xvLQmIadrner1bi45VMJTfnbVHsc7yIajZyoSoK60/dtVBs12Fm6WkUI5/3WAVsNMw==
+  
+  word@~0.3.0:
+    version "0.3.0"
+    resolved "https://registry.yarnpkg.com/word/-/word-0.3.0.tgz#8542157e4f8e849f4a363a288992d47612db9961"
+    integrity sha512-OELeY0Q61OXpdUfTp+oweA/vtLVg5VDOXh+3he3PNzLGG/y0oylSOC1xRVj0+l4vQ3tj/bB1HVHv1ocXkQceFA==
+  
   wrappy@1:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
@@ -1417,6 +1415,21 @@ Lockfile:
       crc-32 "~1.2.0"
       exit-on-epipe "~1.0.1"
       ssf "~0.10.2"
+  
+  xlsx@^0.16.3:
+    version "0.16.3"
+    resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.16.3.tgz#7a91a75eb939db4961122da6f949b8a8f0c8af1a"
+    integrity sha512-LInZ1OK6vpe+Em8XDZ5gDH3WixARwxI7UWc+3chLeafI6gUwECEgL43k4Tjbs1uRfkxpM7wQFy5DLE0hFBRqRw==
+    dependencies:
+      adler-32 "~1.2.0"
+      cfb "^1.1.4"
+      codepage "~1.14.0"
+      commander "~2.17.1"
+      crc-32 "~1.2.0"
+      exit-on-epipe "~1.0.1"
+      ssf "~0.11.2"
+      wmf "~1.0.1"
+      word "~0.3.0"
   
   xmldom@^0.1.27:
     version "0.1.31"
