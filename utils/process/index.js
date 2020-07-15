@@ -2,6 +2,10 @@ const utils = require('../index').utils;
 
 exports.processer = {
     //合并列
+    /*
+        测试数据 ：
+        [{"name":"joinColumn","options":{"cols":[0,1],"separator":",","target":0}}]
+     */
     joinColumn:function (excelObject,options) {
         let cols = options.cols; // 合并列的下标数组，如：[1,2,3]
         let separator = options.separator; //   合并的分割符，如：，
@@ -14,11 +18,16 @@ exports.processer = {
         excelObject.column = newColumn;
     },
     //切割列
+    /*
+        测试数据
+        [{"name":"joinColumn","options":{"cols":[0,1],"separator":",","target":0}},
+        {"name":"splitColumn","options":{"max":3,"separator":",","target":0}}]
+     */
     splitColumn:function (excelObject,options) {
         let max = options.max;
         let separator = utils.isBlank(options.separator) ? ',' : options.separator;
         let target = options.target;
-        let addCols = Array.from(Array(max), (_, i) =>  `${excelObject.column}_${i+1}`);
+        let addCols = utils.cols(max).map( (i) =>  `${excelObject.column[target]}_${i+1}`);
         let newColumn = excelObject.column.slice(0,target).concat(addCols).concat(excelObject.column.slice(target+1));
         excelObject.data = excelObject.data.map(row => {
             let splitData = row[excelObject.column[target]].split(new RegExp(separator));
@@ -38,6 +47,12 @@ exports.processer = {
 
     },
     //去重
+    /*
+        测试数据 ：
+        [{"name":"joinColumn","options":{"cols":[0,1],"separator":",","target":0}},
+        {"name":"splitColumn","options":{"max":3,"separator":",","target":0}},
+        {"name":"distinct","options":{"cols":[0,1,2],"deleteRow":true}}]
+     */
     distinct:function (excelObject,options) {
         let { cols, deleteRow } = options; // 参与去重的列的下标数组，如：[1,2,3]
          // 是否删除行，如：true
@@ -61,6 +76,13 @@ exports.processer = {
         excelObject.data = data;
     },
     //过滤
+    /*
+        测试数据 ：
+        [{"name":"joinColumn","options":{"cols":[0,1],"separator":",","target":0}},
+        {"name":"splitColumn","options":{"max":3,"separator":",","target":0}},
+        {"name":"distinct","options":{"cols":[0,1,2],"deleteRow":true}},
+        {"name":"filter","options":{"cols":[0,1,2],"regex":"\\S"}}]
+     */
     filter:function (excelObject,options) {
         let { cols, regex } = options;
         let data = [];
@@ -74,6 +96,14 @@ exports.processer = {
         excelObject.data = data;
     },
     //替换
+    /*
+        测试数据 ：
+        [{"name":"joinColumn","options":{"cols":[0,1],"separator":",","target":0}},
+        {"name":"splitColumn","options":{"max":3,"separator":",","target":0}},
+        {"name":"distinct","options":{"cols":[0,1,2],"deleteRow":true}},
+        {"name":"filter","options":{"cols":[0,1,2],"regex":"\\S"}},
+        {"name":"replace","options":{"cols":[0,1,2],"regex":"\\d","replacer":"AA"}}]
+     */
     replace:function (excelObject,options) {
         let { cols, regex, replacer } = options;
         excelObject.data = excelObject.data.map( row => {

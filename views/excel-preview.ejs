@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <style>
+        table, th, td
+        {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<h1><%= title %></h1>
+<h2>powered by wsure</h2>
+<p>Welcome to <%= title %></p>
+<br/>
+<% if (error) { %>
+    <h2><%= error %></h2>
+<% } %>
+<% if(excelObject.column !== undefined) {%>
+    <table>
+        <tr>
+            <% excelObject.column.forEach( c => { %>
+                <th><%= c %></th>
+            <% }) %>
+        </tr>
+        <% excelObject.data.forEach( row => { %>
+        <tr>
+        <% excelObject.column.forEach( c => { %>
+            <td><%= row[c] %></td>
+        <% }) %>
+        </tr>
+        <% })%>
+    </table>
+<% } %>
+
+<form method="post" enctype="multipart/form-data" action="/excel/preview">
+    Excel：<input type="file" name="file"><br/>
+    Cols：<label>
+        <input type="text" name="cols" pattern="^[\d,]+$" value="<%= body.cols %>">
+    </label><br/>
+    Sheet：<label>
+        <input type="number" name="sheet" value="0"/>
+    </label><br/>
+    Strategy：<label>
+        <textarea name="strategy"  ><%= body.strategy %></textarea>
+    </label><br/>
+
+    <input type="submit">
+</form>
+<footer> powered by wsure</footer>
+</body>
+</html>

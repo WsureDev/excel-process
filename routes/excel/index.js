@@ -16,24 +16,21 @@ router.all('/upload',upload.single('file'),async (req, res, next) => {
     console.log(req.file);
     console.log(req.body);
     let excelObject = {};
-    await createExcelObject(req,res,excelObject);
+
+    try {
+        await createExcelObject(req,res,excelObject);
+    }catch (e) {
+        res.json({error:e.message});
+        return ;
+    }
     res.json(dateFormat(excelObject));
 });
 
 router.all('/download',upload.single('file'),async (req, res, next) => {
     let file = req.file;
-    let strategy = req.body.strategy;
     let excelObject = {};
     try {
-        await createExcelObject(req,res,excelObject);
-        dateFormat(excelObject);
-        console.log(excelObject);
-        if(!utils.isBlank(strategy)){
-            let strategyList = JSON.parse(strategy);
-            strategyList.forEach( s => {
-                excelProcess[s.name](excelObject,s.options);
-            })
-        }
+        await strategyExecute(req,res,excelObject);
     }catch (e) {
         res.json({"error":e.message});
         return ;
@@ -44,25 +41,58 @@ router.all('/download',upload.single('file'),async (req, res, next) => {
     res.end(result, 'binary');
 });
 
+router.all('/preview',upload.single('file'),async (req, res, next) => {
+    let excelObject = {} ,error = null,body = req.body;
+    try {
+        await strategyExecute(req,res,excelObject);
+    }catch (e) {
+        error = e.message;
+        res.render('excel-preview',{
+            title:'excel-preview',
+            excelObject:excelObject,
+            error:error,
+            body:body
+        })
+        return ;
+    }
+    body.cols = utils.colsStr(excelObject.column.length,',');
+    res.render('excel-preview',{
+        title:'excel-preview',
+        excelObject:excelObject,
+        error:error,
+        body:body
+    })
+});
+
+async function strategyExecute(req,res,excelObject){
+    let strategy = req.body.strategy;
+
+    await createExcelObject(req,res,excelObject);
+    dateFormat(excelObject);
+    console.log(excelObject);
+    if(!utils.isBlank(strategy)){
+        let strategyList = JSON.parse(strategy);
+        strategyList.forEach( s => {
+            excelProcess[s.name](excelObject,s.options);
+        })
+    }
+}
 
 
 async function createExcelObject(req,res,excelObject) {
     let cols = req.body.cols,colsArray = [];
 
     if(cols === undefined || cols === null || cols === ''){
-        res.json({"errorMessage":"列为空"});
-        return ;
+        throw new Error("列为空");
     }
 
     let sheet = parseInt(req.body.sheet);
     if(isNaN(sheet) || sheet<0){
-        res.json({"errorMessage":"sheet未选择"});
-        return ;
+        throw new Error("sheet未选择");
     }
     let result = await excelReader.read(req);
     if(sheet > result.length-1){
-        res.json({"errorMessage":"sheet超限"});
-        return ;
+        throw new Error("sheet超限");
     }
 
     excelObject.sheet = sheet;
@@ -73,8 +103,7 @@ async function createExcelObject(req,res,excelObject) {
         .map( i => parseInt(i))
         .filter( i => !isNaN(i) && 0<= i && excelObject.column.length > i);
     if(colsArray.length === 0){
-        res.json({"errorMessage":"有效列为空"});
-        return ;
+        throw new Error("有效列为空");
     }
     excelObject.cols = colsArray;
 }
