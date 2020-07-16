@@ -8,5 +8,9 @@ exports.utils = {
     },
     cols(length){
         return [...Array(length).keys()];
-    }
+    },
+    replace(text,regex,replacer,flag){
+        return String(text).toString().replace(new RegExp(regex,flag),replacer);
+    },
+    omit:(prop, { [prop]: _, ...rest }) => rest
 }

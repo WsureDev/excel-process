@@ -15,15 +15,16 @@ router.get('/',(req, res, next) => {
 router.all('/upload',upload.single('file'),async (req, res, next) => {
     console.log(req.file);
     console.log(req.body);
-    let excelObject = {};
+    let excelObject = {} , options = {};
 
     try {
-        await createExcelObject(req,res,excelObject);
+        await createExcelObject(req,res,excelObject,options);
+        excelProcess.select(excelObject,options);
     }catch (e) {
         res.json({error:e.message});
         return ;
     }
-    res.json(dateFormat(excelObject));
+    res.json();
 });
 
 router.all('/download',upload.single('file'),async (req, res, next) => {
@@ -55,7 +56,8 @@ router.all('/preview',upload.single('file'),async (req, res, next) => {
         })
         return ;
     }
-    body.cols = utils.colsStr(excelObject.column.length,',');
+    body.nextCols = utils.colsStr(excelObject.column.length,',');
+    excelObject.data = excelObject.data.slice(0,10);
     res.render('excel-preview',{
         title:'excel-preview',
         excelObject:excelObject,
@@ -66,10 +68,9 @@ router.all('/preview',upload.single('file'),async (req, res, next) => {
 
 async function strategyExecute(req,res,excelObject){
     let strategy = req.body.strategy;
-
-    await createExcelObject(req,res,excelObject);
-    dateFormat(excelObject);
-    console.log(excelObject);
+    let options = {};
+    await createExcelObject(req,res,excelObject,options);
+    excelProcess.select(excelObject,options);
     if(!utils.isBlank(strategy)){
         let strategyList = JSON.parse(strategy);
         strategyList.forEach( s => {
@@ -79,7 +80,7 @@ async function strategyExecute(req,res,excelObject){
 }
 
 
-async function createExcelObject(req,res,excelObject) {
+async function createExcelObject(req,res,excelObject,options) {
     let cols = req.body.cols,colsArray = [];
 
     if(cols === undefined || cols === null || cols === ''){
@@ -105,16 +106,8 @@ async function createExcelObject(req,res,excelObject) {
     if(colsArray.length === 0){
         throw new Error("有效列为空");
     }
-    excelObject.cols = colsArray;
+    options.cols = colsArray;
 }
 
-
-function dateFormat(excelObject){
-
-    let column = excelObject.cols.map( ci => excelObject.column[ci]);
-    excelProcess.excelDataByColumn(excelObject,column);
-    excelObject.column = column;
-    return excelObject;
-}
 
 module.exports = router;

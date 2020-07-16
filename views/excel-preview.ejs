@@ -9,6 +9,17 @@
             border: 1px solid black;
         }
     </style>
+    <script type="text/javascript">
+        console.log(document.excelForm);
+        function preview(){
+            document.excelForm.action = '/excel/preview'
+            document.excelForm.submit();
+        }
+        function download(){
+            document.excelForm.action = '/excel/download'
+            document.excelForm.submit();
+        }
+    </script>
 </head>
 <body>
 <h1><%= title %></h1>
@@ -34,11 +45,17 @@
         <% })%>
     </table>
 <% } %>
+<br/>
+<br/>
+NextCols：<label>
+    <input type="text" name="nextCols" value="<%= body.nextCols %>">
+</label><br/>
+<br/>
 
-<form method="post" enctype="multipart/form-data" action="/excel/preview">
+<form id="excelForm" name="excelForm" method="post" enctype="multipart/form-data" action="/excel/preview">
     Excel：<input type="file" name="file"><br/>
     Cols：<label>
-        <input type="text" name="cols" pattern="^[\d,]+$" value="<%= body.cols %>">
+        <input type="text" name="cols" value="<%= body.cols %>">
     </label><br/>
     Sheet：<label>
         <input type="number" name="sheet" value="0"/>
@@ -47,7 +64,12 @@
         <textarea name="strategy"  ><%= body.strategy %></textarea>
     </label><br/>
 
-    <input type="submit">
+    Preview：<label>
+        <button type="button" name="Preview" onclick="preview()" >Preview</button>
+    </label><br/>
+    Download：<label>
+        <button type="button" name="Download" onclick="download()" >Download</button>
+    </label><br/>
 </form>
 <footer> powered by wsure</footer>
 </body>
