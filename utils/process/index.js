@@ -8,8 +8,9 @@ exports.processer = {
      */
     join:function (excelObject,options) {
         let cols = options.cols; // 合并列的下标数组，如：[1,2,3]
-        let separator = options.separator; //   合并的分割符，如：，
+        let separator = utils.isBlank(options.separator) ? ',' : options.separator; //   合并的分割符，如：，
         let target = options.target;    //  合并位置 ，在cols 元素内，如：1
+        //选出被选中的新的列
         let newColumn = excelObject.column.filter( (c,index) => !cols.includes(index) || index === target );
         excelObject.data.forEach(
             row => row[excelObject.column[target]] = cols.map(ci => row[excelObject.column[ci]]).join(separator)
