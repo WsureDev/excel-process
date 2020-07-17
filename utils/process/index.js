@@ -28,14 +28,16 @@ exports.processer = {
         let separator = utils.isBlank(options.separator) ? ',' : options.separator;
         let regex = utils.isBlank(options.regex) ? ',' : options.regex;
         let target = options.target;
-        let mode = utils.isBlank(options.mode) ? ',' : options.mode; // all , limit , spare
+        let mode = utils.isBlank(options.mode) ? 'spare' : options.mode; // all , limit , spare
         let keep = utils.isBlank(options.keep) ? false : options.keep;
-        let addCols = utils.cols(limit).map( (i) =>  `${excelObject.column[target]}_${i+1}`);
+
+        let allLength = this.splitAllLength(excelObject,options);
+        let addCols = utils.cols(mode === 'all' ? allLength : limit).map( (i) =>  `${excelObject.column[target]}_${i+1}`);
         let newColumn = excelObject.column.slice(0, keep ? (target+1) : target).concat(addCols).concat(excelObject.column.slice(target+1));
         excelObject.data = excelObject.data.map(row => {
             let splitData = row[excelObject.column[target]].split(new RegExp(regex));
             addCols.forEach( (col,index) => {
-                if(index < addCols.length-1) {
+                if(index < addCols.length-1 || mode !== 'spare') {
                     row[col] = utils.isBlank(splitData[index]) ? '' : splitData[index];
                 } else {
                     let lastAddCol = splitData.slice(index);
@@ -147,6 +149,16 @@ exports.processer = {
             });
             return newRow;
         });
+    },
+    splitAllLength:function(excelObject,options) {
+        let res = 1;
+        let regex = utils.isBlank(options.regex) ? ',' : options.regex;
+        let target = options.target;
+        excelObject.data.forEach( row => {
+            let splitData = row[excelObject.column[target]].split(new RegExp(regex));
+            res = splitData.length > res ? splitData.length : res;
+        })
+        return res;
     }
 
 
